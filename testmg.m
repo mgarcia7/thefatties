@@ -15,12 +15,15 @@ im_gray=wiener2(im_gray);
 figure(1);
 imshow(im_gray); title('Grayscale Image');
 
+%% 
+
 % Thresholding
 threshold=0.51;
 Binary_Image=im2bw(im_gray,threshold);
 figure(2);
 imshow(Binary_Image); title('Binary Image');
 
+%%
 % Region Filling
 Filled_Image=imfill(Binary_Image,'holes');
 figure(3);
