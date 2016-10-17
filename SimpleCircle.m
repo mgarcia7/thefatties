@@ -6,6 +6,7 @@ figure
  %centers = [X Y];
  %radii = 0.1*rand(5,1);
     
+<<<<<<< Updated upstream
  %viscircles(centers,radii);
 
  
@@ -15,3 +16,10 @@ figure
  end
  axis equal
  set(gca,'Color',[0 0 0]);
+=======
+ viscircles(centers,radii,'Color','black');
+ 
+ rectangle('Position',[1,2,5,5],...
+  'Curvature',[1,1], 'FaceColor','r')
+axis square;
+>>>>>>> Stashed changes
