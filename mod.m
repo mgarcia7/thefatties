@@ -1,5 +1,6 @@
 clc
 close all
+%Article Below
 %https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4442582/#SD1
 % Reads in sample, if it has three channels, takes only the first channel
 fname = 'images/3D/3dsample4.jpg';
