@@ -4,7 +4,7 @@
 clc
 close all
 
-fname = 'images/test.jpg';
+fname = 'images/sample4.jpg';
 im_RGB=imread(fname);
 im_gray=rgb2gray(im_RGB);
 
@@ -16,13 +16,13 @@ figure(1);
 imshow(im_gray); title('Grayscale Image');
 
 % Thresholding
-threshold=0.51;
+threshold=0.44;
 Binary_Image=im2bw(im_gray,threshold);
 figure(2);
 imshow(Binary_Image); title('Binary Image');
 
 %%
-%{
+
 % Region Filling
 Filled_Image=imfill(Binary_Image,'holes');
 figure(3);
@@ -34,7 +34,7 @@ imshow(Filled_Image);title('Binary Filled Image');
 RGB_labeled_im=label2rgb(labeled_im);
 figure(4);
 imshow(RGB_labeled_im); title('Labeled Image');
-%}
+
 
 % Area Calculations
 area=zeros(1,num_of_objects);
