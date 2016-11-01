@@ -1,17 +1,23 @@
 clc
 close all
 
+% Reads in sample, if it has three channels, takes only the first channel
 fname = 'images/3D/3dsample1.jpg';
 im = imread(fname);
 if size(im,3) == 3
     im = im(:, :, 1);
 end
 
-im_gray = double(im)/255; % not sure what this step does, but like everyone does it so?
-im_gray = imadjust(im_gray); %adjust contrast of an image, we can play around w values
-%imhist(im_gray)
+% Converts image to a value btw 0 to 1
+im_gray = double(im)/255; 
 
-% Pick an appropriate threshold value -- find a better way to do this
+% Proprotionally scales the image so that 0 = min val and 1 = max val
+im_gray = imadjust(im_gray); 
+%%
+% Finds an appropriate threshold value by assuming that the lipid cell is
+% <= 10% of the whole image
+% TODO: Figure out a better way to get a threshold value b/c dis does not
+% work lol
 [pixelCounts, grayLevels] = imhist(im_gray);
 
 pval = 0.1;
@@ -30,50 +36,50 @@ end
 
 disp(grayLevels(i))
 
-% Creating binary image
+% Creating a binary image using threshold found above
 threshold = grayLevels(i);
 bin_image = im2bw(im_gray,threshold);
 
-% Fill the holes
+% Fill the holes in da image
 Filled_Image=imfill(bin_image,'holes');
 %BW2 = bwareaopen(Filled_Image,75);
 
-% Decide which filter
+% Filtering
+% TODO: decide which filter and disk size, maybe try to find it
+% programmatically
 h = fspecial('disk',10);
-imshowpair(im_gray,medfilt2(Filled_Image,[10 10]),'montage');
+%imshowpair(im_gray,medfilt2(Filled_Image,[10 10]),'montage');
 %imshow(medfilt2(bin_image,[20 20]));
-%imshowpair(imfilter(bin_image,h,'replicate'),medfilt2(bin_image,[15 15]),'montage')
-bin_image = medfilt2(Filled_Image,[15 15]);
+%imshowpair(imfilter(Filled_Image,h,'replicate'),medfilt2(Filled_Image,[10 10]))
+bin_image = medfilt2(Filled_Image,[10 10]);
 
 %%
-% Connected Component Labeling
+% Labels the images
 [labeled_im,num_of_objects]=bwlabel(bin_image,8);
-imshow(labeled_im)
 
-%%
+% Gets the blob properties
+blobMeasurements = regionprops(labeled_im,'all');
+allBlobAreas = [blobMeasurements.Area];
+allBlobExtents = [blobMeasurements.Extent];
 
-RGB_labeled_im=label2rgb(labeled_im); % i think it just makes it pretty???
-figure(4);
-%imshow(RGB_labeled_im); title('Labeled Image');
-imshow(bin_image)
+% Logical vector that has 1 or 0 depending on whether it meets the
+% threshold
+allowableExtent = (allBlobExtents >= 0.5);
+
+% Extracts the circular ones!!
+% TODO: Improve on this? Maybe use circularity instead of extent? Maybe
+% eccentricity??
+BWcircles = ismember(labeled_im, find(allowableExtent));
+
+% Plots the blobs on top of the original image
+imshow(im_gray)
 hold on
-blobMeasurements = regionprops(labeled_im,im_gray,'all');
-numberOfBlobs = size(blobMeasurements,1);
+numberOfBlobs = size(find(allowableExtent),2);
 
-boundaries = bwboundaries(bin_image);
+boundaries = bwboundaries(BWcircles);
 numberOfBoundaries = size(boundaries,1);
 for k = 1 : numberOfBoundaries
 	thisBoundary = boundaries{k};
 	plot(thisBoundary(:,2), thisBoundary(:,1), 'g', 'LineWidth', 2);
 end
 hold off
-%%
-allBlobAreas = [blobMeasurements.Area];
-allBlobExtents = [blobMeasurements.Extent];
-
-allowableExtent = allBlobExtents >= 0.79;
-
-BWcircles = ismember(bin_image, find(allowableExtent));
-labeled_circles = logical(BWcircles);
-
-imshowpair(bin_image,BWcircles)
