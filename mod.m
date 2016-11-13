@@ -3,7 +3,7 @@ close all
 %Article Below
 %https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4442582/#SD1
 % Reads in sample, if it has three channels, takes only the first channel
-fname = 'images/3D/3dsample4.jpg';
+fname = 'images/3D/3dsample1copy.jpg';
 im = imread(fname);
 if size(im,3) == 3
     im = im(:, :, 1);
@@ -55,6 +55,9 @@ h = fspecial('disk',10);
 %imshowpair(imfilter(Filled_Image,h,'replicate'),medfilt2(Filled_Image,[10 10]))
 bin_image = medfilt2(Filled_Image,[8 8]);
 
+figure
+imshow(bin_image)
+
 %%
 % Labels the images
 [labeled_im,num_of_objects]=bwlabel(bin_image,8);
@@ -74,6 +77,7 @@ allowableExtent = (allBlobExtents >= 0.52);
 BWcircles = ismember(labeled_im, find(allowableExtent));
 
 % Plots the blobs on top of the original image
+figure
 imshow(im_gray)
 hold on
 numberOfBlobs = size(find(allowableExtent),2);
