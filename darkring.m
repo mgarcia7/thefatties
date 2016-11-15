@@ -14,7 +14,7 @@ im_gray = double(im)/255;
 im_gray = imadjust(im_gray); 
 
 % Increase the difference between the dark outer ring and the lipid droplet
-threshold = graythresh(im_gray);
+threshold = graythresh(im_gray)*0.75;
 im_gray(im_gray <= threshold) = 0;
 imshow(im_gray)
 

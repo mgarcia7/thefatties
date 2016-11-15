@@ -37,17 +37,36 @@ for n = 1 : col
     end
 end
 
-confusionMatrix = confusionMatrix/numel(actual_bin_image);
-tp = confusionMatrix(1,1);
-tn = confusionMatrix(2,2);
-fp = confusionMatrix(1,2);
-fn = confusionMatrix(2,1);
+%confusionMatrix = confusionMatrix/numel(actual_bin_image);
+tn = confusionMatrix(1,1);
+tp = confusionMatrix(2,2);
+fn = confusionMatrix(1,2);
+fp = confusionMatrix(2,1);
 
 fprintf('\t \t    Actual \n')
-fprintf('               \t  Cell     BG \n')
-fprintf('Predicted  Cell\t %5.4f   %5.4f \n', tp,fp)
-fprintf('           BG  \t %5.4f   %5.4f \n', fn,tn)
+fprintf('                  BG        Cell \n')
+fprintf('Predicted  BG   %d   %d \n', tp,fp)
+fprintf('           Cell %d   %d \n', fn,tn)
 
-accuracy = (tp+tn);
-fprintf('\n Accuracy = %5.5f \n', accuracy)
+total = numel(actual_bin_image);
+accuracy = (tp+tn)/total;
+misclassification = (fp+fn)/total;
+trueposrate = tp/(fn+tp); % sensitivity
+falseposrate = fp/(tn+fp);
+specificity = tn/(tn+fp);
+precision = tp/(fp+tp);
+
+poslikelihood = trueposrate/(1-specificity); 
+neglikelihood = (1-trueposrate)/specificity;
+
+fprintf('\nAccuracy = %5.5f (how often is classifier correct?) \n', accuracy)
+fprintf('Misclassification rate = %5.5f (how often is it wrong) \n', misclassification)
+fprintf('Positive likelihood = %5.5f (when it is actually yes, what is the likelihood that it will predict yes?) \n', poslikelihood)
+fprintf('False positive rate = %5.5f (when it is no, how often does it predict yes?) \n', falseposrate)
+fprintf('Negative likelihood = %5.5f (when it is actually no, how often does it predict yes?) \n', neglikelihood)
+fprintf('Precision = %5.5f (when it predicts yes, how often is it correct) \n', precision)
+
+
+%figure;
+%imshowpair(actual_bin_image,predicted_bin_image)
 end

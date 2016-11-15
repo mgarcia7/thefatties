@@ -1,3 +1,4 @@
+clear
 clc
 close all
 %Article Below
@@ -15,6 +16,7 @@ im_gray = double(im)/255;
 % Proportionally scales the image so that 0 = min val and 1 = max val
 im_gray = imadjust(im_gray); 
 
+%%
 
 % Creating a binary image using threshold found above
 threshold = graythresh(im_gray);
