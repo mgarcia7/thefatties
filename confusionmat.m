@@ -39,7 +39,7 @@ tn_count = numel(tn(tn==1));
 
 sum =fp_count + fn_count + tp_count + tn_count;
 
-fprintf('False Positive: %f \n',fp_count * 100); 
-fprintf('False Negative: %f \n',fn_count * 100);
-fprintf('True Positive: %f \n',tp_count * 100);
-fprintf('True Negative: %f \n',tn_count * 100);
+fprintf('False Positive: %f \n',fp_count/sum); 
+fprintf('False Negative: %f \n',fn_count/sum);
+fprintf('True Positive: %f \n',tp_count/sum);
+fprintf('True Negative: %f \n',tn_count/sum);
