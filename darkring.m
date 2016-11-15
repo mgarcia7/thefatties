@@ -1,4 +1,6 @@
-fname = 'images/3D/3dsample2.jpg';
+clear
+
+fname = 'images/3D/3dsample1.jpg';
 
 % Reads in sample, if it has three channels, takes only the first channel
 im = imread(fname);
@@ -56,7 +58,7 @@ BWcircles = ismember(labeled_im, find(allowableArea & (allowableCircularity | al
 
 figure(2)
 % Plots the blobs on top of the original image
-imshow(im_ok)
+imshow(im_gray)
 hold on
 numberOfBlobs = size(find(allowableExtent),2);
 
