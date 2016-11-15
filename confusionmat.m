@@ -31,7 +31,6 @@ tn = logical(~bin_image & ~bin_labeled_im);
 
 close all;
 
-size_of_im = numel(fp);
 fp_count = numel(fp(fp==1));
 fn_count = numel(fn(fn==1));
 tp_count = numel(tp(tp==1));

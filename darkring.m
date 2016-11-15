@@ -4,8 +4,8 @@ fname = 'images/3D/3dsample1.jpg';
 im_gray = process_image(fname);
 [centers,radii] = getCircleCenters(im_gray);
 bin_image = createCirclesMask(im_gray, centers,radii);
-[labeled_im,num_objects2] = label_images(bin_image,im_gray);
-[valid,num_objects1] = compare_image();
+labeled_im = label_images(bin_image,im_gray);
+valid = compare_image();
 assignin('base','labeled_im',labeled_im);
 assignin('base','bin_labeled_im',bin_image);
 
