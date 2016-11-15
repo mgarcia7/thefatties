@@ -1,37 +1,37 @@
-fname = 'images/3D/3dsample2.jpg';
-
+clc
+close all
+%Article Below
+%https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4442582/#SD1
 % Reads in sample, if it has three channels, takes only the first channel
+fname = 'images/3D/3dsample2.jpg';
 im = imread(fname);
 if size(im,3) == 3
-    im = im(:, :, 2);
+    im = im(:, :, 1);
 end
+
 % Converts image to a value btw 0 to 1
 im_gray = double(im)/255; 
 
 % Proportionally scales the image so that 0 = min val and 1 = max val
 im_gray = imadjust(im_gray); 
 
-% Increase the difference between the dark outer ring and the lipid droplet
+
+% Creating a binary image using threshold found above
 threshold = graythresh(im_gray);
-im_gray(im_gray <= threshold) = 0;
-imshow(im_gray)
+bin_image = im2bw(im_gray,threshold*1.57);
 
-%% Get the circles + create binary image
-Rmin = 5;
-Rmax = 30;
+% Fill the holes in da image
+Filled_Image=imfill(bin_image,'holes');
 
-[centers, radii] = imfindcircles(im_gray,[Rmin Rmax],'ObjectPolarity','bright');
-xc = centers(:,1);
-yc = centers(:,2);
-[xDim,yDim] = size(im_gray);
-[xx,yy] = meshgrid(1:yDim,1:xDim);
-bin_image = false(xDim,yDim);
-for idx = 1:numel(radii)
-	bin_image = bin_image | hypot(xx - xc(idx), yy - yc(idx)) <= radii(idx);
-end
+% Filtering
+% TODO: decide which filter and disk size, maybe try to find it
+% programmatically
+bin_image = medfilt2(Filled_Image,[8 8]);
 
-%% Label images and plot
+figure
+imshow(bin_image)
 
+%%
 % Labels the images
 [labeled_im,num_of_objects]=bwlabel(bin_image,8);
 
@@ -56,7 +56,7 @@ BWcircles = ismember(labeled_im, find(allowableArea & (allowableCircularity | al
 
 figure(2)
 % Plots the blobs on top of the original image
-imshow(im_ok)
+imshow(im_gray)
 hold on
 numberOfBlobs = size(find(allowableExtent),2);
 
