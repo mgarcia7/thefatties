@@ -1,4 +1,4 @@
-function [confusionMatrix] = createconfusionmat(fname, predicted_bin_image)
+function [tn,fn,fp,tp] = createconfusionmat(fname, predicted_bin_image)
 fname = strtok(fname,'.');
 mat_fname = strcat(fname,'_labeled.mat');
 labeled_fname = strcat(fname,'_labeled.jpg');
@@ -45,8 +45,8 @@ fp = confusionMatrix(2,1);
 
 fprintf('\t \t    Actual \n')
 fprintf('                  BG        Cell \n')
-fprintf('Predicted  BG   %d   %d \n', tp,fp)
-fprintf('           Cell %d   %d \n', fn,tn)
+fprintf('Predicted  BG   %d   %d \n', tn,fn)
+fprintf('           Cell %d   %d \n', fp,tp)
 
 total = numel(actual_bin_image);
 accuracy = (tp+tn)/total;

@@ -71,4 +71,4 @@ end
 hold off
 
 %% Get stats
-createconfusionmat(fname,BWcircles);
+[tn,fn,fp,tp] = createconfusionmat(fname,BWcircles);
