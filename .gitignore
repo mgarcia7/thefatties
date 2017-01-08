@@ -22,3 +22,7 @@ images/.DS_Store
 .DS_Store
 
 thresholding.m
+
+.DS_Store
+
+*.jpg
