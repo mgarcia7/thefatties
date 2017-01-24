@@ -4,17 +4,18 @@ close all
 %Article Below
 %https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4442582/#SD1
 % Reads in sample, if it has three channels, takes only the first channel
-fname = 'images/3D/3dsample2.jpg';
+fname = 'R1D2S1d00I1wi.tif';
 im = imread(fname);
 if size(im,3) == 3
     im = im(:, :, 1);
 end
-
+%%
 % Converts image to a value btw 0 to 1
-im_gray = double(im)/255; 
+%im_gray = double(im)/255; 
 
 % Proportionally scales the image so that 0 = min val and 1 = max val
-im_gray = imadjust(im_gray); 
+im_gray = imadjust(im); 
+imshow(im_gray)
 
 %%
 

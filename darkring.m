@@ -1,6 +1,6 @@
 clear
 
-fname = 'images/3D/3dsample1.jpg';
+fname = 'R1D2S1d00I1wi.tif';
 
 % Reads in sample, if it has three channels, takes only the first channel
 im = imread(fname);
@@ -8,10 +8,10 @@ if size(im,3) == 3
     im = im(:, :, 2);
 end
 % Converts image to a value btw 0 to 1
-im_gray = double(im)/255; 
+%im_gray = double(im)/255; 
 
 % Proportionally scales the image so that 0 = min val and 1 = max val
-im_gray = imadjust(im_gray); 
+im_gray = imadjust(im); 
 
 % Increase the difference between the dark outer ring and the lipid droplet
 threshold = graythresh(im_gray)*0.75;
