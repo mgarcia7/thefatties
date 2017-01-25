@@ -1,7 +1,7 @@
 %This code will read in the images from the folder
 contents = dir('Round1');
 for k = 1:(numel(contents)-3)
-    jpgFilename = sprintf('R1A%d.jpg', k);
+    jpgFilename = sprintf('3dsample3.jpg', k);
     fullFileName = fullfile('Round1', jpgFilename);
     if exist(fullFileName, 'file')
         im = imread(fullFileName);
@@ -78,3 +78,9 @@ end
 
 %% Get stats
 %[tn,fn,fp,tp] = createconfusionmat(fname,BWcircles);
+%% Convert from Pixels to microns
+%% Save data into text file
+fileID = fopen('R1D2S1d04I1wi.txt', 'w');
+fprintf(fileID,'%3.2f \n', allBlobAreas);
+fclose(fileID);
+
