@@ -1,4 +1,4 @@
-Day8.txt Measurements
+Diameters from Day8
 1.15 
 4.10 
 1.18 
@@ -118,4 +118,4 @@ Day8.txt Measurements
 1.82 
 2.40 
 2.72 
-Average Area: 1.56
+Average Diameter: 1.56

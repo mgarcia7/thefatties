@@ -1,4 +1,4 @@
-Day16.txt Measurements
+Diameters from Day16
 5.66 
 1.82 
 0.56 
@@ -509,4 +509,4 @@ Day16.txt Measurements
 1.70 
 0.23 
 0.52 
-Average Area: 1.18
+Average Diameter: 1.18

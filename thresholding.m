@@ -1,11 +1,12 @@
 clear
 clc
 close all
+%NOTE I COMMENTED OUT ALL THE IMAGE SHOW TO MAKE SURE IT WAS WORKING
 %Article Below
 %https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4442582/#SD1
 % Reads in sample, if it has three channels, takes only the first channel
 %fname = 'R1D2S1d00I1wi.tif';
-basePath = 'Data/Round1/Design2/'; %Basepath of where the data is
+basePath = 'Data/Round1/Design5/'; %Basepath of where the data is
 allPaths = dir(basePath);  %Gets all content from directory
 subFolders = [allPaths(:).isdir]; %Gets other subfolders
 foldersNames = {allPaths(subFolders).name}'; %Sort subfolder names
@@ -55,6 +56,11 @@ for i=1:length(foldersNames), %Loop through subfolders
         allBlobAreas = [blobMeasurements.Area];
         allBlobPerimeters = [blobMeasurements.Perimeter];
         allBlobExtents = [blobMeasurements.Extent];
+        allBlobDiameters = [blobMeasurements.EquivDiameter];
+        
+        avgImageBlobAreas(j) = mean(allBlobAreas);
+        avgImageBlobDiam(j) = mean(allBlobDiameters);
+        
         
         allBlobCircularities = (4*3.14.*allBlobAreas)./(allBlobPerimeters.^2); % Isoperimetric inequality
         
@@ -83,20 +89,61 @@ for i=1:length(foldersNames), %Loop through subfolders
         end
         hold off
     end
-    [allBlobAreasMicro] = (allBlobAreas.*6.7)./10;
-    avgArea = mean(allBlobAreasMicro);
-    textFileName = [tmp '.txt'];
-    fileID = fopen(textFileName, 'w');
-    fprintf(fileID, '%s Measurements\n', textFileName);
-    fprintf(fileID, '%3.2f \n', allBlobAreasMicro);
-    fprintf(fileID, 'Average Area: %3.2f', avgArea);
-    fclose(fileID);
-    cd ..;
-    cd ..;
-    cd ..;
-    cd ..;
     
+    %Averages the Image Averages to get the Day Average
+    avgDayBlobAreas(i) = mean(avgImageBlobAreas);
+    avgDayBlobDiam(i) = mean(avgImageBlobDiam);
+    
+    %[avgBlobAreas] = (avgBlobAreas)./10;
+    %[avgBlobDiam] = (avgBlobDiam)./10;
+    [allBlobDiaMicro] = (allBlobDiameters)./10;
+    [allBlobAreaMicro] = (allBlobAreas)./10;
+    avgDia = mean(allBlobDiaMicro);
+    avgArea = mean(allBlobAreaMicro);
+    textFileName1 = 'Diameters.txt';
+    textFileName2 = 'Areas.txt';
+    fileID1 = fopen(textFileName1, 'w');
+    fileID2 = fopen(textFileName2, 'w');
+    fprintf(fileID1, 'Diameters from %s\n', tmp);
+    fprintf(fileID2, 'Areas from %s\n', tmp);
+    fprintf(fileID1, '%3.2f \n', allBlobDiaMicro);
+    fprintf(fileID2, '%3.2f \n', allBlobAreaMicro);
+    fprintf(fileID1, 'Average Diameter: %3.2f', avgDia);
+    fprintf(fileID2, 'Average Area: %3.2f', avgArea);
+    fclose(fileID1);
+    fclose(fileID2);
+    cd ..;
+    cd ..;
+    cd ..;
+    cd ..;
+   
 end
 
+%%
+avgDayBlobAreas = avgDayBlobAreas./10;
+avgDayBlobDiam = avgDayBlobDiam./10;
+
+%Plot data
+figure(1)
+scatter(0:4:16, avgDayBlobDiam,'b','Linewidth', 3);
+grid on;
+x = xlabel('Time (Days)');
+y = ylabel('Average Day Lipid Droplet Diameters (Microns)');
+t = title('Round 1 Design 5 Diameters');
+set(t,'Fontweight','bold','Fontsize', 23);
+set(x,'Fontweight','bold','Fontsize', 23);
+set(y,'Fontweight','bold','Fontsize', 23);
+set(gca,'Fontweight','bold','Fontsize',20);
+
+figure(2)
+scatter(0:4:16, avgDayBlobAreas,'b','Linewidth', 3);
+grid on;
+x = xlabel('Time (Days)');
+y = ylabel('Average Day Lipid Droplet Area (Microns)');
+t = title('Round 1 Design 5 Area');
+set(t,'Fontweight','bold','Fontsize', 23);
+set(x,'Fontweight','bold','Fontsize', 23);
+set(y,'Fontweight','bold','Fontsize', 23);
+set(gca,'Fontweight','bold','Fontsize',20);
 %% Get stats
 %createconfusionmat(fname,BWcircles);

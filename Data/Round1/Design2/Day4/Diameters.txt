@@ -1,4 +1,4 @@
-Day4.txt Measurements
+Diameters from Day4
 0.32 
 0.30 
 0.84 
@@ -237,4 +237,4 @@ Day4.txt Measurements
 0.88 
 0.71 
 0.50 
-Average Area: 1.11
+Average Diameter: 1.11

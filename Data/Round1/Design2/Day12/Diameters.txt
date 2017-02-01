@@ -1,4 +1,4 @@
-Day12.txt Measurements
+Diameters from Day12
 0.82 
 0.53 
 0.67 
@@ -1004,4 +1004,4 @@ Day12.txt Measurements
 0.16 
 0.20 
 0.20 
-Average Area: 0.71
+Average Diameter: 0.71

@@ -1,4 +1,4 @@
-Day0.txt Measurements
+Diameters from Day0
 0.37 
 0.76 
 0.62 
@@ -865,4 +865,4 @@ Day0.txt Measurements
 1.11 
 0.37 
 0.42 
-Average Area: 0.78
+Average Diameter: 0.78
