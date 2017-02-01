@@ -1,12 +1,14 @@
 clear
 
+MYDIR = '/Users/melissagarcia/Google Drive/the fatties/Sample Images/Round 1/Day 0 TIF/';
 fname = 'R1D2S1d00I1wi.tif';
 
 % Reads in sample, if it has three channels, takes only the first channel
-im = imread(fname);
+im = imread(strcat(MYDIR,fname));
 if size(im,3) == 3
     im = im(:, :, 2);
 end
+
 % Converts image to a value btw 0 to 1
 %im_gray = double(im)/255; 
 
@@ -22,7 +24,13 @@ imshow(im_gray)
 Rmin = 5;
 Rmax = 30;
 
-[centers, radii] = imfindcircles(im_gray,[Rmin Rmax],'ObjectPolarity','bright');
+[centers, radii] = imfindcircles(im_gray,[5 10],'ObjectPolarity','bright');
+[centers2, radii2] = imfindcircles(im_gray,[11 20],'ObjectPolarity','bright');
+[centers3, radii3] = imfindcircles(im_gray,[21 30],'ObjectPolarity','bright');
+
+centers = [centers; centers2; centers3];
+radii = [radii; radii2; radii3];
+
 xc = centers(:,1);
 yc = centers(:,2);
 [xDim,yDim] = size(im_gray);
