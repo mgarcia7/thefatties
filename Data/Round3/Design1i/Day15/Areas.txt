@@ -1,0 +1,6 @@
+Areas from Day15
+6.02 
+8.92 
+9.06 
+7.26 
+Average Area: 7.82

@@ -6,14 +6,14 @@ close all
 % Reads in sample, if it has three channels, takes only the first channel
 %fname = 'R1D2S1d00I1wi.tif';
 
-xaxis = [0,4,8,12,16];
+xaxis = [0,4,8,12,15,19];
 avgImageBlobDiam = [];
 avgImageBlobAreas = [];
 avgDayBlobAreas = [];
 avgDayBlobDiam = [];
 
 
-basePath = 'Data/Round1/Design3/'; %Basepath of where the data is
+basePath = 'Data/Round3/Design1i/'; %Basepath of where the data is
 allPaths = dir(basePath);  %Gets all content from directory
 subFolders = [allPaths(:).isdir]; %Gets other subfolders
 foldersNames = {allPaths(subFolders).name}'; %Sort subfolder names
@@ -50,8 +50,8 @@ for i=1:length(foldersNames), %Loop through subfolders
         % programmatically
         bin_image = medfilt2(Filled_Image,[8 8]);
         
-        %figure
-        %imshow(bin_image)
+        figure
+        imshow(bin_image)
         
         %%
         % Labels the images
@@ -81,9 +81,9 @@ for i=1:length(foldersNames), %Loop through subfolders
         % eccentricity??
         BWcircles = ismember(labeled_im, find(allowableArea & (allowableCircularity | allowableExtent)));
         
-        %figure(2)
+        figure
         % Plots the blobs on top of the original image
-        %imshow(im_gray)
+        imshow(im_gray)
         hold on
         numberOfBlobs = size(find(allowableExtent),2);
         
@@ -91,7 +91,7 @@ for i=1:length(foldersNames), %Loop through subfolders
         numberOfBoundaries = size(boundaries,1);
         for k = 1 : numberOfBoundaries
             thisBoundary = boundaries{k};
-            %plot(thisBoundary(:,2), thisBoundary(:,1), 'g', 'LineWidth', 2);
+            plot(thisBoundary(:,2), thisBoundary(:,1), 'g', 'LineWidth', 2);
         end
         hold off
     end
@@ -124,26 +124,26 @@ for i=1:length(foldersNames), %Loop through subfolders
 end
 %avgDayBlobAreas = avgDayBlobAreas./10;
 %avgDayBlobDiam = avgDayBlobDiam./10;
-
+%%
 %Plot data
-figure(1)
+figure
 scatter(xaxis, avgDayBlobDiam,'b','Linewidth', 3);
 grid on;
 x = xlabel('Time (Days)');
 y = ylabel('Average Day Lipid Droplet Diameters (Microns)');
-t = title('Round 1 Design 3 Diameters (Without Insulin)');
+t = title('Round 3 Design 1 Diameters (With Insulin)');
 set(t,'Fontweight','bold','Fontsize', 23);
 set(x,'Fontweight','bold','Fontsize', 23);
 set(y,'Fontweight','bold','Fontsize', 23);
 set(gca,'Fontweight','bold','Fontsize',20);
 %saveas(gcf, 'Round 2 Day 2 Diameters (Without Insulin).jpg');
 
-figure(2)
+figure
 scatter(xaxis, avgDayBlobAreas,'b','Linewidth', 3);
 grid on;
 x = xlabel('Time (Days)');
-y = ylabel('Average Day Lipid Droplet Area (Microns)');
-t = title('Round 1 Design 3 Area (Without Insulin)');
+y = ylabel('Average Day Lipid Droplet Area (Microns^2)');
+t = title('Round 3 Design 1 Area (With Insulin)');
 set(t,'Fontweight','bold','Fontsize', 23);
 set(x,'Fontweight','bold','Fontsize', 23);
 set(y,'Fontweight','bold','Fontsize', 23);

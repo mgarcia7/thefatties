@@ -1,0 +1,6 @@
+Areas from Day8
+5.33 
+5.41 
+5.05 
+5.03 
+Average Area: 5.20
