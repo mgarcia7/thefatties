@@ -1,0 +1,6 @@
+Areas from Day4
+261.07 
+89.50 
+63.04 
+118.07 
+Average Area: 132.92

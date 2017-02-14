@@ -1,12 +1,19 @@
-clear
-clc
+clear;clc;
 close all
 %NOTE I COMMENTED OUT ALL THE IMAGE SHOW TO MAKE SURE IT WAS WORKING
 %Article Below
 %https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4442582/#SD1
 % Reads in sample, if it has three channels, takes only the first channel
 %fname = 'R1D2S1d00I1wi.tif';
-basePath = 'Data/Round1/Design5/'; %Basepath of where the data is
+
+xaxis = [0,4,8,12,16];
+avgImageBlobDiam = [];
+avgImageBlobAreas = [];
+avgDayBlobAreas = [];
+avgDayBlobDiam = [];
+
+
+basePath = 'Data/Round1/Design3/'; %Basepath of where the data is
 allPaths = dir(basePath);  %Gets all content from directory
 subFolders = [allPaths(:).isdir]; %Gets other subfolders
 foldersNames = {allPaths(subFolders).name}'; %Sort subfolder names
@@ -31,7 +38,6 @@ for i=1:length(foldersNames), %Loop through subfolders
         %imshow(im_gray)
         
         %%
-        
         % Creating a binary image using threshold found above
         threshold = graythresh(im_gray);
         bin_image = im2bw(im_gray,threshold*1.57);
@@ -91,25 +97,23 @@ for i=1:length(foldersNames), %Loop through subfolders
     end
     
     %Averages the Image Averages to get the Day Average
-    avgDayBlobAreas(i) = mean(avgImageBlobAreas);
-    avgDayBlobDiam(i) = mean(avgImageBlobDiam);
+    avgDayBlobAreas(i) = mean(avgImageBlobAreas)./10;
+    avgDayBlobDiam(i) = mean(avgImageBlobDiam)./10;
     
-    %[avgBlobAreas] = (avgBlobAreas)./10;
-    %[avgBlobDiam] = (avgBlobDiam)./10;
-    [allBlobDiaMicro] = (allBlobDiameters)./10;
-    [allBlobAreaMicro] = (allBlobAreas)./10;
-    avgDia = mean(allBlobDiaMicro);
-    avgArea = mean(allBlobAreaMicro);
+%     [allBlobDiaMicro] = (avgImageBlobAreas)./10;
+%     [allBlobAreaMicro] = (avgImageBlobAreas)./10;
+%     avgDia = mean(allBlobDiaMicro);
+%     avgArea = mean(allBlobAreaMicro);
     textFileName1 = 'Diameters.txt';
     textFileName2 = 'Areas.txt';
     fileID1 = fopen(textFileName1, 'w');
     fileID2 = fopen(textFileName2, 'w');
     fprintf(fileID1, 'Diameters from %s\n', tmp);
     fprintf(fileID2, 'Areas from %s\n', tmp);
-    fprintf(fileID1, '%3.2f \n', allBlobDiaMicro);
-    fprintf(fileID2, '%3.2f \n', allBlobAreaMicro);
-    fprintf(fileID1, 'Average Diameter: %3.2f', avgDia);
-    fprintf(fileID2, 'Average Area: %3.2f', avgArea);
+    fprintf(fileID1, '%3.2f \n', (avgImageBlobDiam./10));
+    fprintf(fileID2, '%3.2f \n', (avgImageBlobAreas./10));
+    fprintf(fileID1, 'Average Diameter: %3.2f', avgDayBlobDiam(i));
+    fprintf(fileID2, 'Average Area: %3.2f', avgDayBlobAreas(i));
     fclose(fileID1);
     fclose(fileID2);
     cd ..;
@@ -118,32 +122,32 @@ for i=1:length(foldersNames), %Loop through subfolders
     cd ..;
    
 end
-
-%%
-avgDayBlobAreas = avgDayBlobAreas./10;
-avgDayBlobDiam = avgDayBlobDiam./10;
+%avgDayBlobAreas = avgDayBlobAreas./10;
+%avgDayBlobDiam = avgDayBlobDiam./10;
 
 %Plot data
 figure(1)
-scatter(0:4:16, avgDayBlobDiam,'b','Linewidth', 3);
+scatter(xaxis, avgDayBlobDiam,'b','Linewidth', 3);
 grid on;
 x = xlabel('Time (Days)');
 y = ylabel('Average Day Lipid Droplet Diameters (Microns)');
-t = title('Round 1 Design 5 Diameters');
+t = title('Round 1 Design 3 Diameters (Without Insulin)');
 set(t,'Fontweight','bold','Fontsize', 23);
 set(x,'Fontweight','bold','Fontsize', 23);
 set(y,'Fontweight','bold','Fontsize', 23);
 set(gca,'Fontweight','bold','Fontsize',20);
+%saveas(gcf, 'Round 2 Day 2 Diameters (Without Insulin).jpg');
 
 figure(2)
-scatter(0:4:16, avgDayBlobAreas,'b','Linewidth', 3);
+scatter(xaxis, avgDayBlobAreas,'b','Linewidth', 3);
 grid on;
 x = xlabel('Time (Days)');
 y = ylabel('Average Day Lipid Droplet Area (Microns)');
-t = title('Round 1 Design 5 Area');
+t = title('Round 1 Design 3 Area (Without Insulin)');
 set(t,'Fontweight','bold','Fontsize', 23);
 set(x,'Fontweight','bold','Fontsize', 23);
 set(y,'Fontweight','bold','Fontsize', 23);
 set(gca,'Fontweight','bold','Fontsize',20);
+%saveas(gcf, 'Round 2 Day 2 Areas (Without Insulin).jpg');
 %% Get stats
 %createconfusionmat(fname,BWcircles);
