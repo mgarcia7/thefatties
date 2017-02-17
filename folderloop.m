@@ -1,112 +1,81 @@
-clear
-clc
-close all
-%NOTE I COMMENTED OUT ALL THE IMAGE SHOW TO MAKE SURE IT WAS WORKING
-%Article Below
-%https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4442582/#SD1
-% Reads in sample, if it has three channels, takes only the first channel
-%fname = 'R1D2S1d00I1wi.tif';
+ABSPATH = strcat(pwd,'/');
 basePath = 'Data'; %Basepath of where the data is
+
+addpath(ABSPATH);
+
 allPaths = dir(basePath);  %Gets all content from directory
 subFolders = [allPaths(:).isdir]; %Gets other subfolders
-foldersNames = {allPaths(subFolders).name}'; %Sort subfolder names
-foldersNames(ismember(foldersNames,{'.','..'})) = []; %Deletes the default folders
-for i=1:length(foldersNames),
-    tmp = foldersNames{i};
-    currentPath = strcat([basePath '/' tmp '/']);
+parentfoldersNames = {allPaths(subFolders).name}'; %Sort subfolder names
+parentfoldersNames(ismember(parentfoldersNames,{'.','..'})) = []; %Deletes the default folders
+
+round_data = cell(2,length(parentfoldersNames));
+
+for i=3:length(parentfoldersNames), % Go through Round folders
+    round = parentfoldersNames{i};
+    currentPath = strcat([ABSPATH basePath '/' round]);
     cd(currentPath);
-    allPaths = dir(foldersNames{i});
+    disp(currentPath)
+
+    allPaths = dir(currentPath);
     subFolders = [allPaths(:).isdir];
-    foldersNames = {allPaths(subFolders).name};
-    foldersNames(ismember(foldersNames,{'.','..'})) = [];
-    for j=1:length(foldersNames), %Loop through subfolders
-        tmp = foldersNames{j};  %Folder Names
-        currentPath = strcat([currentPath tmp]); %Path for next subfolder
-        cd(currentPath);   %Transfers to new directory
-        files = dir('*.tif'); %List of images
-        for k=1:length(files), %Loops through images
-            im = imread(files(k).name); %Reads in images
-            disp(files(k).name);
-            if size(im,3) == 3
-                im = im(:, :, 1);
-            end
-            %%
-            % Converts image to a value btw 0 to 1
-            %im_gray = double(im)/255;
-            
-            % Proportionally scales the image so that 0 = min val and 1 = max val
-            im_gray = imadjust(im);
-            %imshow(im_gray)
-            
-            %%
-            
-            % Creating a binary image using threshold found above
-            threshold = graythresh(im_gray);
-            bin_image = im2bw(im_gray,threshold*1.57);
-            
-            % Fill the holes in da image
-            Filled_Image=imfill(bin_image,'holes');
-            
-            % Filtering
-            % TODO: decide which filter and disk size, maybe try to find it
-            % programmatically
-            bin_image = medfilt2(Filled_Image,[8 8]);
-            
-            %figure
-            %imshow(bin_image)
-            
-            %%
-            % Labels the images
-            [labeled_im,num_of_objects]=bwlabel(bin_image,8);
-            
-            % Gets the blob properties
-            blobMeasurements = regionprops(labeled_im,'all');
-            allBlobAreas = [blobMeasurements.Area];
-            allBlobPerimeters = [blobMeasurements.Perimeter];
-            allBlobExtents = [blobMeasurements.Extent];
-            
-            allBlobCircularities = (4*3.14.*allBlobAreas)./(allBlobPerimeters.^2); % Isoperimetric inequality
-            
-            % Logical vector that has 1 or 0 depending on whether it meets the
-            % threshold
-            allowableArea = (allBlobAreas > 6);
-            allowableExtent = (allBlobExtents >= 0.50);
-            allowableCircularity = (allBlobCircularities >= 0.8);
-            
-            % Extracts the circular ones!!
-            % TODO: Improve on this? Maybe use circularity instead of extent? Maybe
-            % eccentricity??
-            BWcircles = ismember(labeled_im, find(allowableArea & (allowableCircularity | allowableExtent)));
-            
-            %figure(2)
-            % Plots the blobs on top of the original image
-            %imshow(im_gray)
-            hold on
-            numberOfBlobs = size(find(allowableExtent),2);
-            
-            boundaries = bwboundaries(BWcircles);
-            numberOfBoundaries = size(boundaries,1);
-            for k = 1 : numberOfBoundaries
-                thisBoundary = boundaries{k};
-                %plot(thisBoundary(:,2), thisBoundary(:,1), 'g', 'LineWidth', 2);
-            end
-            hold off
+    designfoldersNames = {allPaths(subFolders).name};
+    designfoldersNames(ismember(designfoldersNames,{'.','..'})) = [];
+
+    
+    round_number = str2double(round(6:end));
+        
+    for j=1:length(designfoldersNames), % Go through Design folders
+        design = designfoldersNames{j};  %Folder Names
+        
+        if design(1) == '.'
+            continue
         end
-        [allBlobAreasMicro] = (allBlobAreas.*6.7)./10;
-        avgArea = mean(allBlobAreasMicro);
-        textFileName = [tmp '.txt'];
-        fileID = fopen(textFileName, 'w');
-        fprintf(fileID, '%s Measurements\n', textFileName);
-        fprintf(fileID, '%3.2f \n', allBlobAreasMicro);
-        fprintf(fileID, 'Average Area: %3.2f', avgArea);
-        fclose(fileID);
-        cd ..;
-        cd ..;
-        cd ..;
-        cd ..;
+        
+        designPath = strcat([currentPath '/' design]); %Path for design
+        cd(designPath);   %Transfers to new directory
+        disp(designPath)
+        
+        if design(end) == 'i'
+            design_number = str2double(design(7:end-1));
+        else
+            design_number = str2double(design(7:end));
+        end
+        
+        allPaths = dir(designPath);
+        subFolders = [allPaths(:).isdir];
+        dayfoldersNames = {allPaths(subFolders).name};
+        dayfoldersNames(ismember(dayfoldersNames,{'.','..'})) = [];
+        
+        current_design_data = zeros(length(dayfoldersNames),2);
+        
+        for k = 1:length(dayfoldersNames)
+            day = char(dayfoldersNames(k));
+            day_number = str2double(day(4:end)); 
+            imagePath = strcat(designPath,'/',day,'/','*.tif');
+            files = dir(imagePath); % List of images
+            
+            dayAreas = [];
+            for n=1:length(files), %Loops through images
+                im = imread(strcat(designPath,'/',day,'/',files(n).name)); %Reads in images
+                disp(files(n).name);
+                currentBlobAreas = improf(im);
+                dayAreas = [dayAreas currentBlobAreas]; 
+            end
+
+            [allBlobAreasMicro] = (dayAreas.*6.7)./10;
+            avgArea = mean(allBlobAreasMicro);
+            current_design_data(k,:) = [day_number avgArea];
+        end
+        
+        % INSULIN = 2, W/O INSULIN = 1
+        if design(end) == 'i'
+            round_data{2,design_number} = current_design_data;
+        else
+            round_data{1,design_number} = current_design_data;
+        end
         
     end
+    
+    cd(currentPath);
+    save(strcat(round,'_data'), 'round_data');
 end
-
-%% Get stats
-%createconfusionmat(fname,BWcircles);

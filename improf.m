@@ -1,11 +1,12 @@
-close all
+function [allBlobAreas] = improf(im)
+TESTING = false;
 
-MYDIR = 'Data/Round1/Design2/Day12/';
-fname = {'R1D2S1d12I2wi.tif', 'R1D2S3d12I1wi.tif', 'R1D2S3d12I2wi.tif', 'R1D2S2d12I2wi.tif', 'R1D2S1d12I1wi.tif'};
+if TESTING
+    MYDIR = 'Data/Round1/Design2/Day12/';
+    fname = {'R1D2S1d12I2wi.tif', 'R1D2S3d12I1wi.tif', 'R1D2S3d12I2wi.tif', 'R1D2S2d12I2wi.tif', 'R1D2S1d12I1wi.tif'};
+    im = imread(strcat(MYDIR,fname{3}));
+end
 
-%im = imread(strcat(MYDIR,fname{3}));
-im = comp;
-%%
 if size(im,3) == 3
     im = im(:, :, 1);
 end
@@ -25,8 +26,10 @@ Filled_Image=imfill(bin_image,'holes');
 bin_image = medfilt2(bin_image,[8 8]);
 
 
-figure
-imshow(bin_image)
+if TESTING
+    figure
+    imshow(bin_image)
+end
 
 %%
 % Labels the image
@@ -48,16 +51,25 @@ allowableSolidity = (allBlobSolidity > 0.5);
 
 BWcircles = ismember(labeled_im, find(allowableArea & (allowableCircularity | allowableExtent) & allowableSolidity ));
 
-%%
-figure(5)
-% Plots the blobs on top of the original image
-imshow(im_gray)
-hold on
+if TESTING
+    figure(5)
+    % Plots the blobs on top of the original image
+    imshow(im_gray)
+    hold on
 
-boundaries = bwboundaries(BWcircles);
-numberOfBoundaries = size(boundaries,1);
-for k = 1 : numberOfBoundaries
-	thisBoundary = boundaries{k};
-	plot(thisBoundary(:,2), thisBoundary(:,1), 'g', 'LineWidth', 2);
+    boundaries = bwboundaries(BWcircles);
+    numberOfBoundaries = size(boundaries,1);
+    for k = 1 : numberOfBoundaries
+        thisBoundary = boundaries{k};
+        plot(thisBoundary(:,2), thisBoundary(:,1), 'g', 'LineWidth', 2);
+    end
+    hold off
+
+    save('debugvars');
+else
+    [labeled_im]=bwlabel(BWcircles,8);
+    blobMeasurements = regionprops(labeled_im,'Area');
+    allBlobAreas = [blobMeasurements.Area];
 end
-hold off
+
+end

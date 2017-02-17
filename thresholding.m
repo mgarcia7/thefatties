@@ -149,5 +149,3 @@ set(x,'Fontweight','bold','Fontsize', 23);
 set(y,'Fontweight','bold','Fontsize', 23);
 set(gca,'Fontweight','bold','Fontsize',20);
 %saveas(gcf, 'Round 2 Day 2 Areas (Without Insulin).jpg');
-%% Get stats
-%createconfusionmat(fname,BWcircles);
