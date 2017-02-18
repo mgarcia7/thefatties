@@ -8,9 +8,9 @@ subFolders = [allPaths(:).isdir]; %Gets other subfolders
 parentfoldersNames = {allPaths(subFolders).name}'; %Sort subfolder names
 parentfoldersNames(ismember(parentfoldersNames,{'.','..'})) = []; %Deletes the default folders
 
-round_data = cell(2,length(parentfoldersNames));
+experimental_data = cell(1,length(parentfoldersNames)); % Holds every round lol
 
-for i=3:length(parentfoldersNames), % Go through Round folders
+for i=1:length(parentfoldersNames) % Go through Round folders
     round = parentfoldersNames{i};
     currentPath = strcat([ABSPATH basePath '/' round]);
     cd(currentPath);
@@ -21,18 +21,18 @@ for i=3:length(parentfoldersNames), % Go through Round folders
     designfoldersNames = {allPaths(subFolders).name};
     designfoldersNames(ismember(designfoldersNames,{'.','..'})) = [];
 
-    
+    round_data = cell(2,length(designfoldersNames)); % Holds the data for each round
     round_number = str2double(round(6:end));
         
     for j=1:length(designfoldersNames), % Go through Design folders
         design = designfoldersNames{j};  %Folder Names
         
-        if design(1) == '.'
+        if design(1) == '.' %Skip hidden folders
             continue
         end
         
         designPath = strcat([currentPath '/' design]); %Path for design
-        cd(designPath);   %Transfers to new directory
+        cd(designPath);   
         disp(designPath)
         
         if design(end) == 'i'
@@ -46,7 +46,7 @@ for i=3:length(parentfoldersNames), % Go through Round folders
         dayfoldersNames = {allPaths(subFolders).name};
         dayfoldersNames(ismember(dayfoldersNames,{'.','..'})) = [];
         
-        current_design_data = zeros(length(dayfoldersNames),2);
+        current_design_data = zeros(length(dayfoldersNames),2); % Holds the data for a particular design
         
         for k = 1:length(dayfoldersNames)
             day = char(dayfoldersNames(k));
@@ -77,5 +77,8 @@ for i=3:length(parentfoldersNames), % Go through Round folders
     end
     
     cd(currentPath);
+    experimental_data{round_number} = round_data;
     save(strcat(round,'_data'), 'round_data');
 end
+
+save('experimental_data','experimental_data');
