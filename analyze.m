@@ -120,7 +120,9 @@ f.Visible = 'on';
     ax_old = ha;
     f_new = figure('Visible','off');
     ax_new = copyobj(ax_old,f_new);
+    
     set(ax_new,'Position','default')
+    legend(ax_new, '-DynamicLegend');
     print(f_new,strcat('plot',datestr(datetime('now'))),'-dpng')
   end
 
