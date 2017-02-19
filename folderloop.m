@@ -8,11 +8,17 @@ subFolders = [allPaths(:).isdir]; %Gets other subfolders
 parentfoldersNames = {allPaths(subFolders).name}'; %Sort subfolder names
 parentfoldersNames(ismember(parentfoldersNames,{'.','..'})) = []; %Deletes the default folders
 
-experimental_data = cell(1,length(parentfoldersNames)); % Holds every round lol
-
+% If it exists, load the experimental_data file, if not, create a new one
+try
+    load(fullfile('Data','experimental_data.mat')); 
+catch
+    experimental_data = cell(1,length(parentfoldersNames));
+end
+    
+%%
 for i=1:length(parentfoldersNames) % Go through Round folders
     round = parentfoldersNames{i};
-    currentPath = strcat([ABSPATH basePath '/' round]);
+    currentPath = fullfile(ABSPATH,basePath,round);
     cd(currentPath);
     disp(currentPath)
 
@@ -31,14 +37,16 @@ for i=1:length(parentfoldersNames) % Go through Round folders
             continue
         end
         
-        designPath = strcat([currentPath '/' design]); %Path for design
+        designPath = fullfile(currentPath,design);  %Path for design
         cd(designPath);   
         disp(designPath)
         
         if design(end) == 'i'
             design_number = str2double(design(7:end-1));
+            ins_val = 2;
         else
             design_number = str2double(design(7:end));
+            ins_val = 1;
         end
         
         allPaths = dir(designPath);
@@ -51,12 +59,20 @@ for i=1:length(parentfoldersNames) % Go through Round folders
         for k = 1:length(dayfoldersNames)
             day = char(dayfoldersNames(k));
             day_number = str2double(day(4:end)); 
-            imagePath = strcat(designPath,'/',day,'/','*.tif');
+            
+            % Check if this particular day has already been analyzed
+            pot = experimental_data{round_number}{ins_val,design_number}(:,1) == day_number;
+            
+            if sum(pot) > 0 % if the particular day is found in the matrix, then that  means it has already been analyzed and should not be analyzed again
+                continue;
+            end
+            
+            imagePath = fullfile(designPath,day,'*.tif'); 
             files = dir(imagePath); % List of images
             
-            dayAreas = [];
+            dayAreas = zeros(1,length(files));
             for n=1:length(files), %Loops through images
-                im = imread(strcat(designPath,'/',day,'/',files(n).name)); %Reads in images
+                im = imread(fullfile(designPath,day,files(n).name)); %Reads in images
                 disp(files(n).name);
                 currentBlobAreas = improf(im);
                 dayAreas = [dayAreas currentBlobAreas]; 
@@ -78,7 +94,6 @@ for i=1:length(parentfoldersNames) % Go through Round folders
     
     cd(currentPath);
     experimental_data{round_number} = round_data;
-    save(strcat(round,'_data'), 'round_data');
 end
 
 save('experimental_data','experimental_data');
