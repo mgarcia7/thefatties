@@ -11,8 +11,10 @@ parentfoldersNames(ismember(parentfoldersNames,{'.','..'})) = []; %Deletes the d
 % If it exists, load the experimental_data file, if not, create a new one
 try
     load(fullfile('Data','experimental_data.mat')); 
+    disp('Successfully loaded Data/experimental_data.mat..')
 catch
     experimental_data = cell(1,length(parentfoldersNames));
+    disp('No Data/experimental_data.mat found..')
 end
     
 %%
@@ -20,8 +22,8 @@ for i=1:length(parentfoldersNames) % Go through Round folders
     round = parentfoldersNames{i};
     currentPath = fullfile(ABSPATH,basePath,round);
     cd(currentPath);
-    disp(currentPath)
-
+    
+    
     allPaths = dir(currentPath);
     subFolders = [allPaths(:).isdir];
     designfoldersNames = {allPaths(subFolders).name};
@@ -39,7 +41,7 @@ for i=1:length(parentfoldersNames) % Go through Round folders
         
         designPath = fullfile(currentPath,design);  %Path for design
         cd(designPath);   
-        disp(designPath)
+      
         
         if design(end) == 'i'
             design_number = str2double(design(7:end-1));
@@ -59,12 +61,14 @@ for i=1:length(parentfoldersNames) % Go through Round folders
         for k = 1:length(dayfoldersNames)
             day = char(dayfoldersNames(k));
             day_number = str2double(day(4:end)); 
+            disp(strcat('Processing ', round, ' ', design, ' ', day, ' data...'))
             
             % Check if this particular day has already been analyzed
             pot = experimental_data{round_number}{ins_val,design_number}(:,1) == day_number;
             
             if sum(pot) > 0 % if the particular day is found in the matrix, then that  means it has already been analyzed and should not be analyzed again
                 continue;
+                disp('Data has already been processed..')
             end
             
             imagePath = fullfile(designPath,day,'*.tif'); 
@@ -73,8 +77,11 @@ for i=1:length(parentfoldersNames) % Go through Round folders
             dayAreas = zeros(1,length(files));
             for n=1:length(files), %Loops through images
                 im = imread(fullfile(designPath,day,files(n).name)); %Reads in images
-                disp(files(n).name);
+                disp(strcat('Analyzing ', files(n).name, '...'))
+                
+                tic;
                 currentBlobAreas = improf(im);
+                toc;
                 dayAreas = [dayAreas currentBlobAreas]; 
             end
 
