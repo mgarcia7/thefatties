@@ -1,0 +1,3 @@
+Areas from Day12
+ 
+Average Area: NaN

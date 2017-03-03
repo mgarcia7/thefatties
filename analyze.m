@@ -7,7 +7,7 @@ f = figure('Visible','off','Position',[360,500,1000,600]);
 
 % Load experimental data to the workspace
 d = load('Data/experimental_data.mat');
-experimental_data = d.experimental_data;
+data = d.experimental_data;
 
 % Construct the components.
 
@@ -25,7 +25,7 @@ hpanel = uipanel('parent',f,...
 
 
 % Pop up menu w the rounds to choose from
-string_menu_options = cellstr(strcat('Round ',num2str([1:length(experimental_data)]','%d'))); % It says the brackets are unnecessary, but then it doesn't do the right thing so like it's lying
+string_menu_options = cellstr(strcat('Round ',num2str([1:length(data)]','%d'))); % It says the brackets are unnecessary, but then it doesn't do the right thing so like it's lying
 hpopup = uicontrol('Style','popupmenu',...
            'String',string_menu_options,...
            'Position',[300,50,100,25],...
@@ -39,11 +39,17 @@ align([hpanel,hsave,hpopup],'Center','None');
 
 % Initialize the UI.
 % Change units to normalized so components resize automatically.
-f.Units = 'normalized';
-ha.Units = 'normalized';
-hpanel.Units = 'normalized';
-hsave.Units = 'normalized';
-hpopup.Units = 'normalized';
+set(f,'Units','normalized')
+set(ha,'Units','normalized')
+set(hpanel,'Units','normalized')
+set(hsave,'Units','normalized')
+set(hpopup,'Units','normalized')
+
+% f.Units = 'normalized';
+% ha.Units = 'normalized';
+% hpanel.Units = 'normalized';
+% hsave.Units = 'normalized';
+% hpopup.Units = 'normalized';
 
 % Initialize variables here so that they are accessible to all nested
 % functions
@@ -52,14 +58,14 @@ plts = [];
 cbx = [];
 
 % Assign the a name to appear in the window title.
-f.Name = 'wut up fatties ~~~';
+%f.Name = 'wut up fatties ~~~';
 
 % Move the window to the center of the screen.
-movegui(f,'center')
+%movegui(f,'center')
 
 % Make the window visible.
-f.Visible = 'on';
-
+%f.Visible = 'on';
+set(f,'Visible','on');
 %  Pop-up menu callback. 
 % Changes the round dataset that it's using, and populates the checkboxes
    function popup_menu_Callback(source,~) 
@@ -67,7 +73,7 @@ f.Visible = 'on';
       val = get(source,'Value');
       
       % Set current data to the selected data set.
-      current_data = experimental_data{val};
+      current_data = data{val};
       
       % Clears panel & plots
       delete(get(hpanel,'Children'))

@@ -1,0 +1,3 @@
+Areas from Day0
+ 
+Average Area: NaN

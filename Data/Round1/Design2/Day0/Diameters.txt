@@ -1,0 +1,3 @@
+Diameters from Day0
+ 
+Average Diameter: NaN

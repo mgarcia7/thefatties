@@ -6,14 +6,12 @@ close all
 % Reads in sample, if it has three channels, takes only the first channel
 %fname = 'R1D2S1d00I1wi.tif';
 
-xaxis = [0,4,8,12,15,19];
 avgImageBlobDiam = [];
 avgImageBlobAreas = [];
 avgDayBlobAreas = [];
 avgDayBlobDiam = [];
 
-
-basePath = 'Data/Round3/Design1i/'; %Basepath of where the data is
+basePath = 'Data/Sample/sample/'; %Basepath of where the data is
 allPaths = dir(basePath);  %Gets all content from directory
 subFolders = [allPaths(:).isdir]; %Gets other subfolders
 foldersNames = {allPaths(subFolders).name}'; %Sort subfolder names
@@ -124,28 +122,28 @@ for i=1:length(foldersNames), %Loop through subfolders
 end
 %avgDayBlobAreas = avgDayBlobAreas./10;
 %avgDayBlobDiam = avgDayBlobDiam./10;
-%%
-%Plot data
-figure
-scatter(xaxis, avgDayBlobDiam,'b','Linewidth', 3);
-grid on;
-x = xlabel('Time (Days)');
-y = ylabel('Average Day Lipid Droplet Diameters (Microns)');
-t = title('Round 3 Design 1 Diameters (With Insulin)');
-set(t,'Fontweight','bold','Fontsize', 23);
-set(x,'Fontweight','bold','Fontsize', 23);
-set(y,'Fontweight','bold','Fontsize', 23);
-set(gca,'Fontweight','bold','Fontsize',20);
-%saveas(gcf, 'Round 2 Day 2 Diameters (Without Insulin).jpg');
-
-figure
-scatter(xaxis, avgDayBlobAreas,'b','Linewidth', 3);
-grid on;
-x = xlabel('Time (Days)');
-y = ylabel('Average Day Lipid Droplet Area (Microns^2)');
-t = title('Round 3 Design 1 Area (With Insulin)');
-set(t,'Fontweight','bold','Fontsize', 23);
-set(x,'Fontweight','bold','Fontsize', 23);
-set(y,'Fontweight','bold','Fontsize', 23);
-set(gca,'Fontweight','bold','Fontsize',20);
-%saveas(gcf, 'Round 2 Day 2 Areas (Without Insulin).jpg');
+% %%
+% %Plot data
+% figure
+% scatter(xaxis, avgDayBlobDiam,'b','Linewidth', 3);
+% grid on;
+% x = xlabel('Time (Days)');
+% y = ylabel('Average Day Lipid Droplet Diameters (Microns)');
+% t = title('Round 3 Design 1 Diameters (With Insulin)');
+% set(t,'Fontweight','bold','Fontsize', 23);
+% set(x,'Fontweight','bold','Fontsize', 23);
+% set(y,'Fontweight','bold','Fontsize', 23);
+% set(gca,'Fontweight','bold','Fontsize',20);
+% %saveas(gcf, 'Round 2 Day 2 Diameters (Without Insulin).jpg');
+% 
+% figure
+% scatter(xaxis, avgDayBlobAreas,'b','Linewidth', 3);
+% grid on;
+% x = xlabel('Time (Days)');
+% y = ylabel('Average Day Lipid Droplet Area (Microns^2)');
+% t = title('Round 3 Design 1 Area (With Insulin)');
+% set(t,'Fontweight','bold','Fontsize', 23);
+% set(x,'Fontweight','bold','Fontsize', 23);
+% set(y,'Fontweight','bold','Fontsize', 23);
+% set(gca,'Fontweight','bold','Fontsize',20);
+% %saveas(gcf, 'Round 2 Day 2 Areas (Without Insulin).jpg');

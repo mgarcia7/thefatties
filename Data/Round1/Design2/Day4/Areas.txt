@@ -1,0 +1,3 @@
+Areas from Day4
+ 
+Average Area: NaN
