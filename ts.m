@@ -24,7 +24,7 @@ end
 hold off
 
 %%
-filepath = '/Users/melissagarcia/Google Drive/the fatties/Data for Accuracy Plot/';
+%filepath = '/Users/mbolick/Google Drive/the fatties/Data for Accuracy Plot/';
 NM = load(fullfile(filepath,'Melissa.txt'));
 NT = load(fullfile(filepath,'Tyler LD measure.txt'));
 NS = load(fullfile(filepath,'LDdata87-173.txt'));

@@ -11,7 +11,7 @@ avgImageBlobAreas = [];
 avgDayBlobAreas = [];
 avgDayBlobDiam = [];
 
-basePath = 'Data/Sample/sample/'; %Basepath of where the data is
+basePath = 'Data/Round4/Design1i/Day4/'; %Basepath of where the data is
 allPaths = dir(basePath);  %Gets all content from directory
 subFolders = [allPaths(:).isdir]; %Gets other subfolders
 foldersNames = {allPaths(subFolders).name}'; %Sort subfolder names

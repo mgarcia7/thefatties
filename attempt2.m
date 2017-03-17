@@ -1,15 +1,16 @@
 close all;
 
-im = imread('Test.jpg');
-if size(im,3) == 3
-    im = im(:, :, 1);
+im = imread('newidealimage2.jpg');
+[rows, cols, channels] = size(im);
+if channels >1
+    im = im(:, :, 2);
 end
 %%
 % Converts image to a value btw 0 to 1
-%im_gray = double(im)/255;
+im_gray = double(im)/255;
 
 % Proportionally scales the image so that 0 = min val and 1 = max val
-im_gray = imadjust(im);
+im_gray = imadjust(im_gray);
 %imshow(im_gray)
 
 %%
@@ -23,7 +24,7 @@ Filled_Image=imfill(bin_image,'holes');
 % Filtering
 % TODO: decide which filter and disk size, maybe try to find it
 % programmatically
-%bin_image = medfilt2(Filled_Image,[5 5]);
+bin_image = medfilt2(Filled_Image,[5 5]);
 
 figure
 imshow(bin_image)
@@ -66,3 +67,7 @@ for k = 1 : numberOfBoundaries
     plot(thisBoundary(:,2), thisBoundary(:,1), 'g', 'LineWidth', 2);
 end
 hold off
+
+fid=fopen('idealimageanalyzed.txt','wt');
+fprintf(fid,'%d\n',allBlobDiameters);
+fclose(fid);
