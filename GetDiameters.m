@@ -1,9 +1,12 @@
+%% Plot index numbers on top of the original image
+
+% im = the tif image
+% BWcircles = the binary image
+
 [nLabel,num] = bwlabel(BWcircles,8);
 
 s = regionprops(nLabel, 'Area', 'Centroid', 'MajorAxisLength');
-areas = cat(1,s.Area);
-[sortedareas,sortorder] = sort(areas,'descend');
-s2 = s(sortorder);
+dia = cat(1,s.MajorAxisLength);
 
 imshow(im)
 hold on
@@ -22,17 +25,25 @@ end
 
 
 hold off
+%% Get the R coefficient ~
 
-%%
-filepath = '/Users/melissagarcia/Google Drive/the fatties/Data for Accuracy Plot/';
+% Loads all the collected data into a matrix where first column = ind of
+% LD, and second column is the area
+filepath = '~/Google Drive/the fatties/Data for Accuracy Plot/';
 NM = load(fullfile(filepath,'Melissa.txt'));
 NT = load(fullfile(filepath,'Tyler LD measure.txt'));
 NS = load(fullfile(filepath,'LDdata87-173.txt'));
 NMA = load(fullfile(filepath,'marge.txt'));
 NP = [NM; NT; NS; NMA];
 
-f = @(x) (x.*6.7)./10;
+f = @(x) (x.*6.7)./10; % Function to convert pixels to microns
+ind = NP(:,1); % These are the indices of the LDs that we calculated diameters for
 
+algorithm_diameters = f(dia(ind)); % Algorithm found diameters for the specific LDs in microns
+hand_diameters = f(NP(:,2)); % Hand calculated diameters for specific LDS in microns
+R = corr2(algorithm_diameters,hand_diameters);
+
+%% You can ignore this!
 figure;
 ind = NP(:,1);
 plot(f(dia(ind)),f(NP(:,2)), 'o', 'Linewidth', 6)
