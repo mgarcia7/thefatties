@@ -1,8 +1,0 @@
-Areas from Day12
-9.74 
-9.33 
-9.35 
-7.45 
-7.42 
-8.41 
-Average Area: 8.62

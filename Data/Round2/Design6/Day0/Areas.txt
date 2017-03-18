@@ -1,4 +1,0 @@
-Areas from Day0
-81.54 
-83.48 
-Average Area: 82.51

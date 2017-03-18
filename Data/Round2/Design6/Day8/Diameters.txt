@@ -1,4 +1,0 @@
-Diameters from Day8
-1.14 
-1.22 
-Average Diameter: 1.18
