@@ -1,16 +1,19 @@
-function [allBlobAreas] = improf(im)
-TESTING = false;
+function [allBlobAreas, allBlobDiams] = improf(im)
+TESTING = true;
 
 if TESTING
-    MYDIR = 'Data/Round1/Design2/Day12/';
+    MYDIR = 'Data/Round1/Design2i/Day12/';
     fname = {'R1D2S1d12I2wi.tif', 'R1D2S3d12I1wi.tif', 'R1D2S3d12I2wi.tif', 'R1D2S2d12I2wi.tif', 'R1D2S1d12I1wi.tif'};
-    im = imread(strcat(MYDIR,fname{3}));
+    im = imread(strcat(MYDIR,fname{1}));
 end
 
 if size(im,3) == 3
     im = im(:, :, 1);
 end
 
+% 3 = nile red (LD)
+% 1 = phase
+% 2 = DAPI (nucleus)
 % Scales image intensity values & adjusts contrast of the image
 im_gray = imadjust(im); 
 im_gray = mat2gray(im_gray);
@@ -68,7 +71,8 @@ if TESTING
     save('debugvars');
 else
     [labeled_im]=bwlabel(BWcircles,8);
-    blobMeasurements = regionprops(labeled_im,'Area');
+    blobMeasurements = regionprops(labeled_im,'MajorAxisLength','Area');
+    allBlobDiams = [blobMeasurements.MajorAxisLength];
     allBlobAreas = [blobMeasurements.Area];
 end
 

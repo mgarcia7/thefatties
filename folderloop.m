@@ -10,7 +10,8 @@ parentfoldersNames(ismember(parentfoldersNames,{'.','..'})) = []; %Deletes the d
 
 % If it exists, load the experimental_data file, if not, create a new one
 try
-    load(fullfile('Data','experimental_data.mat')); 
+    d = load(fullfile(ABSPATH,'Data','experimental_data.mat')); 
+    experimental_data = d.experimental_data;
     disp('Successfully loaded Data/experimental_data.mat..')
 catch
     experimental_data = cell(1,length(parentfoldersNames));
@@ -63,8 +64,9 @@ for i=1:length(parentfoldersNames) % Go through Round folders
             day_number = str2double(day(4:end)); 
             disp(strcat('Processing ', round, ' ', design, ' ', day, ' data...'))
             
+            
             % Check if this particular day has already been analyzed
-            pot = experimental_data{round_number}{ins_val,design_number}(:,1) == day_number;
+            pot = (experimental_data{round_number}{ins_val,design_number}(:,1) == day_number);
             
             if sum(pot) > 0 % if the particular day is found in the matrix, then that  means it has already been analyzed and should not be analyzed again
                 continue;
@@ -80,7 +82,7 @@ for i=1:length(parentfoldersNames) % Go through Round folders
                 disp(strcat('Analyzing ', files(n).name, '...'))
                 
                 tic;
-                currentBlobAreas = improf(im);
+                [currentBlobAreas, currentBlobDiams] = improf(im);
                 toc;
                 dayAreas = [dayAreas currentBlobAreas]; 
             end
