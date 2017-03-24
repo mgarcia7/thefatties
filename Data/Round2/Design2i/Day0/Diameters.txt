@@ -1,4 +1,0 @@
-Diameters from Day0
-0.52 
-0.56 
-Average Diameter: 0.54

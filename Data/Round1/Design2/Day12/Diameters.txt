@@ -1,3 +1,0 @@
-Diameters from Day12
- 
-Average Diameter: NaN
