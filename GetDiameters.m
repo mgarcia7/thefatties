@@ -18,7 +18,7 @@ for k = 1 : numberOfBoundaries
     plot(thisBoundary(:,2), thisBoundary(:,1), 'g', 'LineWidth', 2);
 end
 
-for k = C
+for k = 1:size(1:
    centroid = s(k).Centroid;
    text(centroid(1), centroid(2), sprintf('%d', k), 'Color', 'm');
 end

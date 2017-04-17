@@ -1,7 +1,7 @@
 function [tn,fn,fp,tp] = createconfusionmat(fname, predicted_bin_image)
 fname = strtok(fname,'.');
 mat_fname = strcat(fname,'_labeled.mat');
-labeled_fname = strcat(fname,'_labeled.jpg');
+labeled_fname = strcat('labeled_2.tif');
 
 if exist(mat_fname,'file')
     load(mat_fname,'-mat', 'actual_bin_image');
@@ -20,8 +20,10 @@ else
     
     actual_bin_image = im2bw(im_gray,0.95);
     save(mat_fname,'actual_bin_image');
+    
 end
 
+imshow(actual_bin_image)
 predicted_bin_image = logical(predicted_bin_image);
 actual_bin_image = logical(actual_bin_image);
 
@@ -61,12 +63,10 @@ neglikelihood = (1-trueposrate)/specificity;
 
 fprintf('\nAccuracy = %5.5f (how often is classifier correct?) \n', accuracy)
 fprintf('Misclassification rate = %5.5f (how often is it wrong) \n', misclassification)
-fprintf('Positive likelihood = %5.5f (when it is actually yes, what is the likelihood that it will predict yes?) \n', poslikelihood)
+fprintf('Positive likelihood = %5.5f (when it is actually yes, what is the likelihood that it will predict yes?) \n', trueposrate)
 fprintf('False positive rate = %5.5f (when it is no, how often does it predict yes?) \n', falseposrate)
 fprintf('Negative likelihood = %5.5f (when it is actually no, how often does it predict yes?) \n', neglikelihood)
 fprintf('Precision = %5.5f (when it predicts yes, how often is it correct) \n', precision)
 
-
-%figure;
-%imshowpair(actual_bin_image,predicted_bin_image)
+disp(2 * (precision*trueposrate)/(precision+trueposrate))
 end

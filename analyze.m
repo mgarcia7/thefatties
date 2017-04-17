@@ -6,7 +6,7 @@ function analyze
 f = figure('Visible','off','Position',[360,500,1000,600]);
 
 % Load experimental data to the workspace
-d = load('Data/experimental_data.mat');
+d = load('/Users/melissagarcia/Google Drive/the fatties/Data/experimental_data.mat');
 data = d.experimental_data;
 
 % Construct the components.
