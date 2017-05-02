@@ -28,14 +28,17 @@ end
 im_gray = imadjust(im); 
 im_gray = mat2gray(im_gray);
 
+figure;
+imshow(im_gray)
+
 % Create binary image w/ calculated threshold
-threshold = graythresh(im_gray);
+threshold = graythresh(im_gray)*1.7;
 bin_image = im2bw(im_gray,threshold);
 
 % Filters image to get rid of random specks
 bin_image = medfilt2(bin_image,[8 8]);
 
-bin_image(~LDcontent) = 0;
+%bin_image(~LDcontent) = 0;
 
 % Fill the holes in image
 bin_image =imfill(bin_image,'holes');
@@ -45,6 +48,8 @@ bin_image =imfill(bin_image,'holes');
 %     imshow(bin_image)
 % end
 
+figure;
+imshow(bin_image);
 %%
 % Labels the image
 [labeled_im,num_of_objects]=bwlabel(bin_image,8);
@@ -70,15 +75,12 @@ if TESTING
     % Plots the blobs on top of the original image
     [nLabel,num] = bwlabel(BWcircles,8);
 
-    labeled_im = imread('/Users/melissagarcia/Google Drive/the fatties/Selected Images for Confusion Matrix/Design 8/LABELED_R7d06-2017-0005_D8S2I1wi.tif');
-
     imshow(im_gray)
     hold on
 
     boundaries = bwboundaries(BWcircles);
     numberOfBoundaries = size(boundaries,1);
-    vals = [510, 109, 162, 448, 418];
-    for k = vals
+    for k = 1:numberOfBoundaries
         thisBoundary = boundaries{k};
         plot(thisBoundary(:,2), thisBoundary(:,1), 'g', 'LineWidth', 2);
     end
@@ -86,13 +88,6 @@ if TESTING
     [nLabel,num] = bwlabel(BWcircles,8);
 
     s = regionprops(nLabel, 'Area', 'Centroid', 'MajorAxisLength');
-    diameters = cat(1,s.MajorAxisLength);
-
-    for k = vals
-       centroid = s(k).Centroid;
-       text(centroid(1), centroid(2), sprintf('%d', k), 'Color', 'm');
-    end
-
 
     hold off
     
