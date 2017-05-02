@@ -46,7 +46,13 @@ for i=1:length(parentfoldersNames) % Go through Round folders
         current_design_data = zeros(length(dayfoldersNames),2); % Holds the data for a particular design
         
         init = dayfoldersNames{1};
-        final = dayfoldersNames{end};
+        
+        if numel(dayfoldersNames) >= 4
+            final = dayfoldersNames{4};
+        else
+            final = dayfoldersNames{end};
+        end
+            
         
         samples = {'S1','S2','Sother'};
         
@@ -91,7 +97,7 @@ for i=1:length(parentfoldersNames) % Go through Round folders
         end
         toc;
         
-        delta = finalarea - initarea;
+        delta = (finalarea - initarea)./initarea;
         delta(isnan(delta)) = []; % Removes NaN
 
         experimental_data{design_number}{ins_val} = [experimental_data{design_number}{ins_val} delta];
@@ -101,4 +107,4 @@ for i=1:length(parentfoldersNames) % Go through Round folders
     cd(currentPath);
 end
 
-save('/Users/melissagarcia/Google Drive/the fatties/Data/experimental_data_DeltaArea.mat','experimental_data');
+save('/Users/melissagarcia/Google Drive/the fatties/Data/experimental_data_DeltaAreaUntilDay12.mat','experimental_data');
