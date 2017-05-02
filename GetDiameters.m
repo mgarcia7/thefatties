@@ -26,20 +26,20 @@ end
 
 hold off
 %% Get the R coefficient ~
-
-<<<<<<< HEAD:ts.m
 %%
 %filepath = '/Users/mbolick/Google Drive/the fatties/Data for Accuracy Plot/';
-=======
 % Loads all the collected data into a matrix where first column = ind of
 % LD, and second column is the area
 filepath = '~/Google Drive/the fatties/Data for Accuracy Plot/';
->>>>>>> origin/master:GetDiameters.m
-NM = load(fullfile(filepath,'Melissa.txt'));
-NT = load(fullfile(filepath,'Tyler LD measure.txt'));
-NS = load(fullfile(filepath,'LDdata87-173.txt'));
-NMA = load(fullfile(filepath,'marge.txt'));
-NP = [NM; NT; NS; NMA];
+%NM = load(fullfile(filepath,'Melissa.txt'));
+%NT = load(fullfile(filepath,'Tyler LD measure.txt'));
+%NS = load(fullfile(filepath,'LDdata87-173.txt'));
+%NMA = load(fullfile(filepath,'marge.txt'));
+%NP = [NM; NT; NS; NMA];
+NP = [load(fullfile(filepath,'Design2.txt'))];
+
+%filepath2 = '~/Google Drive/the fatties/Selected Images for Confusion Matrix/Design 2/';
+%dia = importdata(fullfile(filepath2,'R4D2S1d20I2wi_diameters.mat'));
 
 f = @(x) (x.*6.7)./10; % Function to convert pixels to microns
 ind = NP(:,1); % These are the indices of the LDs that we calculated diameters for
